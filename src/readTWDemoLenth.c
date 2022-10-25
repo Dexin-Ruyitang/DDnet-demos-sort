@@ -1,6 +1,7 @@
 #include "STDIO.H"
 
 //#define DEBUG
+//const char* fn="0 KBeeeR S - 2_2022-04-15_19-34-17.demo";
 
 int readLen(char* filename);
 
@@ -17,14 +18,19 @@ int main(int argc, char** argv){
     s=len%60;
     m=len%3600/60;
     h=len/3600;
-    if(m==0&&h==0){
+    if (len<=0) {
+        char er[5]="null";
+        printf("%12s",er);
+        len=-1;
+    }
+    else if(m==0&&h==0){
         printf("%12d",s);
     }
     else if(h==0){
-        printf("%9d:%2d",m,s);
+        printf("%9d:%02d",m,s);
     }
     else{
-        printf("%6d:%2d:%2d",h,m,s);
+        printf("%6d:%02d:%02d",h,m,s);
     }
 
     printf("%10d\n",len);
@@ -34,11 +40,11 @@ int main(int argc, char** argv){
 
 int readLen(char* filename){
     FILE* demo=NULL;
-    demo=fopen(filename,"r");
-    int res=0;
+    demo=fopen(filename,"rb");
+    int res=0x00;
     fseek(demo,152,SEEK_SET);
     for(int i=0;i<4;i++){
-        res+=(int)fgetc(demo);
+        res+=((int)(fgetc(demo))<<(8*(3-i)));
     }
     fclose(demo);
     return res;
